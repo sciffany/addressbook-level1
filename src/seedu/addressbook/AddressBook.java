@@ -479,18 +479,28 @@ public class AddressBook {
     /**
      * Retrieves all persons in the full model whose names contain some of the specified keywords.
      *
-     * @param keywords for searching
+     * @param keywords for searching, which may not be capitalised
      * @return list of persons in full model with name containing some of the keywords
      */
     private static ArrayList<String[]> getPersonsWithNameContainingAnyKeyword(Collection<String> keywords) {
         final ArrayList<String[]> matchedPersons = new ArrayList<>();
         for (String[] person : getAllPersonsInAddressBook()) {
             final Set<String> wordsInName = new HashSet<>(splitByWhitespace(getNameFromPerson(person)));
-            if (!Collections.disjoint(wordsInName, keywords)) {
+            System.out.println(toLowerCaseC(wordsInName));
+            if (!Collections.disjoint(wordsInName, keywords) || !Collections.disjoint(toLowerCaseC(wordsInName), keywords)) {
                 matchedPersons.add(person);
             }
         }
         return matchedPersons;
+    }
+
+    private static Set<String> toLowerCaseC(Collection<String> keywords) {
+        Set<String> lowerCaseVersion = new HashSet<>();
+        for (String s : keywords ){
+            lowerCaseVersion.add(s.toLowerCase());
+            System.out.println(s.toLowerCase());
+        }
+        return lowerCaseVersion;
     }
 
     /**
@@ -1048,7 +1058,7 @@ public class AddressBook {
      * @param name to be validated
      */
     private static boolean isPersonNameValid(String name) {
-        return name.matches("(\\w|\\s)+");  // name is nonempty mixture of alphabets and whitespace
+        return name.matches("(\\w|\\s)+"); // name is nonempty mixture of alphabets and whitespace
         //TODO: implement a more permissive validation
     }
 
